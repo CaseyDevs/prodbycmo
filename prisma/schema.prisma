@@ -7,10 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Song {
+model Beat {
   id        Int      @id @default(autoincrement())
   title     String
-  artist    String
+  artists   Artist[]
   url       String
+  coverImg  String
+  createdAt DateTime @default(now())
+}
+
+model Artist {
+  id        Int      @id @default(autoincrement())
+  name      String
+  beats     Beat[]
   createdAt DateTime @default(now())
 }
