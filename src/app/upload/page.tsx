@@ -9,6 +9,7 @@ export default function Upload() {
         const formData = new FormData();
         const fileInput = document.querySelector('input[name="files"]') as HTMLInputElement; // Get the file input element
         
+        // Check if a file is selected
         if (fileInput && fileInput.files) {
             const file = fileInput.files[0];
             formData.append("file", file);
@@ -17,14 +18,20 @@ export default function Upload() {
                 method: "POST",
                 body: formData,
             })
-            .then((response) => {
+            .then(async (response) => {
                 if (response.ok) {
                     alert("File uploaded successfully!");
                 } else {
-                    alert("File upload failed.");
+                    const errorText = await response.text();
+                    console.error("Upload failed:", errorText);
+                    alert("File upload failed. Check console for details.");
                 }
-            }
-        )}
+            })
+            .catch((error) => {
+                console.error("Network error:", error);
+                alert("File upload failed due to a network error.");
+            });
+        }
     }
 
     return (

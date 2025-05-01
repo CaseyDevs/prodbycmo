@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 // Create a Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 export async function POST(request: NextRequest) {
@@ -17,11 +17,11 @@ export async function POST(request: NextRequest) {
     const artist = formData.get("artist") as string;
     const genre = formData.get("genre") as string;
     const bpm = formData.get("bpm") as string;
-    const coverImg = formData.get("coverImg") as string;
+    // const coverImg = formData.get("coverImg") as string;
 
-    if (!file || !title || !artist || !genre || !bpm || !coverImg) {
-      return NextResponse.json({ error: "Missing Fields" }, { status: 400 });
-    }
+    // if (!file || !title || !artist || !genre || !bpm) {
+    //   return NextResponse.json({ error: "Missing Fields" }, { status: 400 });
+    // }
 
     // Generate a unique filename
     const fileName = `${uuid()}-${file.name}`;
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ message: "File uploaded successfully", data });
-    
+
   } catch (error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
