@@ -13,6 +13,10 @@ export default function Beat({ beat }: { beat: { id: string; title: string; arti
 						<p className="text-sm text-gray-400"><strong>Genre:</strong> {beat.genre}</p>
 						<p className="text-sm text-gray-400"><strong>BPM:</strong> {beat.bpm}</p>
 						<p className="text-sm text-gray-400"><strong>Key:</strong> A#</p>
+						<audio controls className="ml-4">
+							<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+							Your browser does not support the audio element.
+						</audio>
 					</div>
 				</div>
 			</div>
