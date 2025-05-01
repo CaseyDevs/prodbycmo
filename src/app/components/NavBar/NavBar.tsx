@@ -6,6 +6,7 @@ export default function NavBar() {
         { href: "/", label: "Dashboard" },
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
+        { href: "/upload", label: "Upload" },
     ];
 
     return (
