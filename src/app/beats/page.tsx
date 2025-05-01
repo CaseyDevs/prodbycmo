@@ -18,7 +18,11 @@ export default function Beats() {
           <div>
           <h2 className="text-xl font-bold">Autumn 97'</h2>
           <p className="text-sm text-gray-400">Artists: prodbycmo, prodbytrigg</p>
-          <p className="text-sm text-gray-400">Genre: Hiphop</p>
+          <div className="flex flex-row gap-2">            
+          <p className="text-sm text-gray-400"><strong>Genre:</strong> Hiphop</p>
+          <p className="text-sm text-gray-400"><strong>BPM:</strong> 90</p>
+          <p className="text-sm text-gray-400"><strong>Key:</strong> A#</p>
+          </div>
           </div>
         </div>
       </div>

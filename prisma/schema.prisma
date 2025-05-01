@@ -11,6 +11,9 @@ model Beat {
   id        Int      @id @default(autoincrement())
   title     String
   artists   Artist[]
+  bpm       Int
+  genre     String
+  key       String
   url       String
   coverImg  String
   createdAt DateTime @default(now())
