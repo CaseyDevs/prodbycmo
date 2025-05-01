@@ -1,3 +1,5 @@
+"use client";
+
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
