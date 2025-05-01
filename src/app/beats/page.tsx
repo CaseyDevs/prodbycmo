@@ -28,7 +28,9 @@ export default async function Beats() {
                 artist: beat.artists.map((a) => a.name).join(", "),
                 genre: beat.genre,
                 bpm: beat.bpm,
+                key: beat.key,
                 coverImg: beat.coverImg,
+                url: beat.url,
               }}
             />
           ))}

@@ -1,4 +1,4 @@
-export default function Beat({ beat }: { beat: { id: string; title: string; artist: string; genre: string; bpm: number; coverImg: string } }) {
+export default function Beat({ beat }: { beat: { id: string; title: string; artist: string; genre: string; bpm: number; key: string, coverImg: string, url: string } }) {
     return (
 			<div className="flex gap-6 items-center bg-zinc-800 p-4 rounded-lg">
 				<img
@@ -12,9 +12,9 @@ export default function Beat({ beat }: { beat: { id: string; title: string; arti
 					<div className="flex flex-row gap-2">
 						<p className="text-sm text-gray-400"><strong>Genre:</strong> {beat.genre}</p>
 						<p className="text-sm text-gray-400"><strong>BPM:</strong> {beat.bpm}</p>
-						<p className="text-sm text-gray-400"><strong>Key:</strong> A#</p>
+						<p className="text-sm text-gray-400"><strong>Key:</strong> {beat.key}</p>
 						<audio controls className="ml-4">
-							<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+							<source src={beat.url} type="audio/mpeg" />
 							Your browser does not support the audio element.
 						</audio>
 					</div>
