@@ -1,8 +1,8 @@
-export default function Beat({ beat }: { beat: { id: string; title: string; artist: string; genre: string; bpm: number } }) {
+export default function Beat({ beat }: { beat: { id: string; title: string; artist: string; genre: string; bpm: number; coverImg: string } }) {
     return (
 			<div className="flex gap-6 items-center bg-zinc-800 p-4 rounded-lg">
 				<img
-					src="https://via.placeholder.com/150"
+					src={beat.coverImg}
 					alt="Beat Cover"
 					className="w-18 h-18 rounded-lg"
 				/>
