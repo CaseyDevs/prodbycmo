@@ -2,6 +2,29 @@ import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
 export default function Upload() {
+
+    async function handleUpload() {
+        const formData = new FormData();
+        const fileInput = document.querySelector('input[name="files"]') as HTMLInputElement; // Get the file input element
+        
+        if (fileInput && fileInput.files) {
+            const file = fileInput.files[0];
+            formData.append("file", file);
+            console.log("File selected:", file.name);
+            await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => {
+                if (response.ok) {
+                    alert("File uploaded successfully!");
+                } else {
+                    alert("File upload failed.");
+                }
+            }
+        )}
+    }
+
     return (
         <>
             <NavBar />
@@ -46,6 +69,10 @@ export default function Upload() {
                     <button
                         type="submit"
                         className="bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-700 transition"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleUpload();
+                        }}
                     >
                         Upload
                     </button>
