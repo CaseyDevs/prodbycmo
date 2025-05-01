@@ -15,15 +15,23 @@ export async function POST(request: NextRequest) {
 
     const file:File | null = formData.get("file") as unknown as File;
     const title = formData.get("title") as string;
-    const artistName = formData.get("artist") as string;
+    const artistName = formData.get("artist");
     const genre = formData.get("genre") as string;
     const bpm = formData.get("bpm") as string;
     const key = formData.get("key") as string;
     const coverImg = formData.get("coverImg") as string;
 
-    // if (!file || !title || !artist || !genre || !bpm) {
-    //   return NextResponse.json({ error: "Missing Fields" }, { status: 400 });
-    // }
+    if (
+        !file ||
+        !title ||
+        !artistName ||
+        !genre ||
+        !bpm ||
+        !key ||
+        !coverImg
+      ) {
+        return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      }
 
     // Generate a unique filename
     const fileName = `${uuid()}-${file.name}`;
@@ -43,9 +51,9 @@ export async function POST(request: NextRequest) {
 
     // Create or find the artist first
     const artist = await prisma.artist.upsert({
-        where: { name: artistName },
+        where: { name: artistName as string},
         update: {},
-        create: { name: artistName },
+        create: { name: artistName as string},
       });
   
       // Add the beat to the database
@@ -63,9 +71,11 @@ export async function POST(request: NextRequest) {
         },
       });
 
-    return NextResponse.json({ message: "File uploaded successfully", data });
+      return NextResponse.json({ message: "Beat created successfully", beat }, { status: 201 });
 
-  } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Upload error:", error);
+    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
   }
+  
 }
