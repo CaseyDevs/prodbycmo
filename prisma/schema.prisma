@@ -21,7 +21,7 @@ model Beat {
 
 model Artist {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   beats     Beat[]
   createdAt DateTime @default(now())
 }

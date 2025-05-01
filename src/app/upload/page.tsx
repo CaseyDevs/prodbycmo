@@ -75,6 +75,16 @@ export default function Upload() {
                         placeholder="BPM"
                         className="border border-gray-300 rounded p-3 focus:outline-none"
                     />
+                    <input
+                        type="text"
+                        placeholder="Cover Image URL (optional)"
+                        className="border border-gray-300 rounded p-3 focus:outline-none"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Key (optional)"
+                        className="border border-gray-300 rounded p-3 focus:outline-none"
+                    />
                     <button
                         type="submit"
                         className="bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-700 transition"
