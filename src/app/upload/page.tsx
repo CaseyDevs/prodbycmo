@@ -12,6 +12,8 @@ export default function Upload() {
   const [bpm, setBpm] = useState("");
   const [key, setKey] = useState("");
   const [coverImg, setCoverImg] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   async function handleUpload() {
     if (!file || !title || !artist || !genre || !bpm) {
@@ -33,6 +35,23 @@ export default function Upload() {
         method: "POST",
         body: formData,
       });
+
+      
+      // Handle upload progress
+      setIsUploading(true);
+      const reader = response.body?.getReader();
+      const contentLength = Number(response.headers.get("Content-Length"));
+      if (reader && contentLength) {
+        const total = contentLength;
+        let loaded = 0;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          loaded += value.length;
+          setUploadProgress(Math.round((loaded / total) * 100));
+        }
+        setIsUploading(false);
+      }
 
       if (response.ok) {
         alert("File uploaded successfully!");
@@ -118,6 +137,7 @@ export default function Upload() {
               e.preventDefault();
               handleUpload();
             }}
+            disabled={isUploading}
           >
             Upload
           </button>
