@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    const file:File | null = formData.get("file") as unknown as File;
+    const file: File | null = formData.get("file") as unknown as File;
     const title = formData.get("title") as string;
     const artistName = formData.get("artist");
     const genre = formData.get("genre") as string;
@@ -22,16 +22,16 @@ export async function POST(request: NextRequest) {
     const coverImg = formData.get("coverImg") as string;
 
     if (
-        !file ||
-        !title ||
-        !artistName ||
-        !genre ||
-        !bpm ||
-        !key ||
-        !coverImg
-      ) {
-        return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-      }
+      !file ||
+      !title ||
+      !artistName ||
+      !genre ||
+      !bpm ||
+      !key ||
+      !coverImg
+    ) {
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    }
 
     // Generate a unique filename
     const fileName = `${uuid()}-${file.name}`;
@@ -51,31 +51,31 @@ export async function POST(request: NextRequest) {
 
     // Create or find the artist first
     const artist = await prisma.artist.upsert({
-        where: { name: artistName as string},
-        update: {},
-        create: { name: artistName as string},
-      });
-  
-      // Add the beat to the database
-      const beat = await prisma.beat.create({
-        data: {
-          title,
-          artists: {
-            connect: { id: artist.id },
-          },
-          genre,
-          bpm: parseInt(bpm),
-          key,
-          coverImg,
-          url: fileUrl,
-        },
-      });
+      where: { name: artistName as string },
+      update: {},
+      create: { name: artistName as string },
+    });
 
-      return NextResponse.json({ message: "Beat created successfully", beat }, { status: 201 });
+    // Add the beat to the database
+    const beat = await prisma.beat.create({
+      data: {
+        title,
+        artists: {
+          connect: { id: artist.id },
+        },
+        genre,
+        bpm: parseInt(bpm),
+        key,
+        coverImg,
+        url: fileUrl,
+      },
+    });
+
+    return NextResponse.json({ message: "Beat created successfully", beat }, { status: 201 });
 
   } catch (error: any) {
     console.error("Upload error:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
   }
-  
+
 }
