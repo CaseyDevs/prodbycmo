@@ -14,18 +14,18 @@ export default function Upload() {
   const [coverImg, setCoverImg] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [fileSizeInMB, setFileSizeInMB] = useState(0);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      const fileSizeInMB = selectedFile.size / (1024 * 1024);
+      setFileSizeInMB(selectedFile.size / (1024 * 1024));
       
       if (fileSizeInMB > 50) {
         alert("File size exceeds 50MB. Please select a smaller file.");
         setFile(null);
       }
-
     }
   }
 
@@ -34,7 +34,7 @@ export default function Upload() {
       alert("Please fill in all required fields.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", title);
@@ -43,42 +43,42 @@ export default function Upload() {
     formData.append("bpm", bpm);
     formData.append("key", key);
     formData.append("coverImg", coverImg);
-
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+  
+    // start uploading
+    setIsUploading(true);
+    setUploadProgress(0);
+  
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload");
+  
+    // listen for progress events
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(percent);
       }
-    );
-
-      // CARRY ON HERE
-      // setIsUploading(true);
-      // const reader = response.body?.getReader();
-      // if (reader) {
-      //   const contentLength = +response.headers.get("Content-Length")!;
-      //   const total = contentLength || 0;
-      //   let loaded = 0;
-      //   while (true) {
-      //     const { done, value } = await reader.read();
-      //     if (done) break;
-      //     loaded += value.length;
-      //     setUploadProgress(Math.round((loaded / total) * 100));
-      //   }
-      //   setIsUploading(false);
-      // }
-
-      if (response.ok && uploadProgress === 100) {
+    };
+  
+    xhr.onload = () => {
+      setIsUploading(false);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setUploadProgress(100);
         alert("File uploaded successfully!");
       } else {
-        const errorText = await response.text();
-        console.error("Upload failed:", errorText);
-        alert("File upload failed. Check console for details.");
+        console.error("Upload failed:", xhr.responseText);
+        alert("File upload failed. See console for details.");
       }
-    } catch (error) {
-      console.error("Network error:", error);
-      alert("File upload failed due to a network error.");
-    }
+    };
+  
+    xhr.onerror = () => {
+      setIsUploading(false);
+      console.error("Network error during upload");
+      alert("Network error. Please try again.");
+    };
+  
+    xhr.send(formData);
   }
+  
 
   return (
     <>
@@ -106,7 +106,7 @@ export default function Upload() {
             <div className="text-center">
               <p className="text-lg font-semibold">{file.name}</p>
               <p className="text-gray-500">
-                {Math.round(file.size / 1024)} KB
+                {fileSizeInMB.toFixed(2)} MB
               </p>
             </div>
           )}
