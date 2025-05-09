@@ -15,6 +15,20 @@ export default function Upload() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const fileSizeInMB = selectedFile.size / (1024 * 1024);
+      
+      if (fileSizeInMB > 50) {
+        alert("File size exceeds 50MB. Please select a smaller file.");
+        setFile(null);
+      }
+
+    }
+  }
+
   async function handleUpload() {
     if (!file || !title || !artist || !genre || !bpm) {
       alert("Please fill in all required fields.");
@@ -34,26 +48,26 @@ export default function Upload() {
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
-      });
-
-      
-      // Handle upload progress
-      setIsUploading(true);
-      const reader = response.body?.getReader();
-      const contentLength = Number(response.headers.get("Content-Length"));
-      if (reader && contentLength) {
-        const total = contentLength;
-        let loaded = 0;
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          loaded += value.length;
-          setUploadProgress(Math.round((loaded / total) * 100));
-        }
-        setIsUploading(false);
       }
+    );
 
-      if (response.ok) {
+      // CARRY ON HERE
+      // setIsUploading(true);
+      // const reader = response.body?.getReader();
+      // if (reader) {
+      //   const contentLength = +response.headers.get("Content-Length")!;
+      //   const total = contentLength || 0;
+      //   let loaded = 0;
+      //   while (true) {
+      //     const { done, value } = await reader.read();
+      //     if (done) break;
+      //     loaded += value.length;
+      //     setUploadProgress(Math.round((loaded / total) * 100));
+      //   }
+      //   setIsUploading(false);
+      // }
+
+      if (response.ok && uploadProgress === 100) {
         alert("File uploaded successfully!");
       } else {
         const errorText = await response.text();
@@ -84,9 +98,18 @@ export default function Upload() {
               accept="audio/*"
               id="files"
               className="hidden"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={handleFileChange}
+              required
             />
           </label>
+          {file && (
+            <div className="text-center">
+              <p className="text-lg font-semibold">{file.name}</p>
+              <p className="text-gray-500">
+                {Math.round(file.size / 1024)} KB
+              </p>
+            </div>
+          )}
           <input
             type="text"
             placeholder="Title"
