@@ -189,18 +189,12 @@ export default function Upload() {
           </button>
           {isUploading && (
             <div className="mt-4">
-              <p className="text-gray-500">Uploading: {uploadProgress}%</p>
+              {uploadProgress != 100 ? <p className="text-gray-500">Loading: {uploadProgress}%</p> : <p className="text-gray-500">Please wait...</p>}
               <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                 <div
                   className="bg-orange-500 h-2.5 rounded-full"
                   style={{ width: `${uploadProgress}%` }}
                 >
-                  {/* Display please wait message */}
-                  {uploadProgress == 100 && (
-                    <p className="text-center text-sm text-gray-500">
-                      Please wait...
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
