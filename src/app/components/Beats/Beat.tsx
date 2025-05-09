@@ -1,4 +1,42 @@
+"use client"
+
+import { useRef } from "react";
+import { useEffect } from "react";
+
+const audioRefs: HTMLAudioElement[] = []; // Store references to all audio elements
+
 export default function Beat({ beat }: { beat: { id: string; title: string; artist: string; genre: string; bpm: number; key: string, coverImg: string, url: string } }) {
+
+	const audioRef = useRef<HTMLAudioElement>(null);
+
+	useEffect(() => {
+		const audio = audioRef.current;  // Get the current audio element reference
+		if (!audio) return;
+
+		audioRefs.push(audio);
+		
+		const handlePlay = () => {
+			audioRefs.forEach((otherAudio) => {
+				if (otherAudio !== audio) {
+					otherAudio.pause();
+					otherAudio.currentTime = 0;
+				}
+			});
+		};
+
+		audio.addEventListener("play", handlePlay);
+
+		// Cleanup function to remove the event listener and the audio reference
+		return () => {
+			audio.removeEventListener("play", handlePlay);
+			const index = audioRefs.indexOf(audio);
+			if (index !== -1) {
+				audioRefs.splice(index, 1);
+			}
+		};
+	}, []);
+
+
     return (
 			<div className="flex gap-6 items-center bg-zinc-800 p-4 rounded-lg">
 				<img
@@ -13,8 +51,8 @@ export default function Beat({ beat }: { beat: { id: string; title: string; arti
 						<p className="text-sm text-gray-400"><strong>Genre:</strong> {beat.genre}</p>
 						<p className="text-sm text-gray-400"><strong>BPM:</strong> {beat.bpm}</p>
 						<p className="text-sm text-gray-400"><strong>Key:</strong> {beat.key}</p>
-						<audio controls className="ml-4">
-							<source src={beat.url} type="audio/mpeg" />
+						<audio ref={audioRef} controls preload="metadata" className="ml-4">
+							<source src={beat.url} />
 							Your browser does not support the audio element.
 						</audio>
 					</div>
