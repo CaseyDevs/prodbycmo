@@ -13,7 +13,7 @@ export default function Beat({ beat }: { beat: { id: string; title: string; arti
 						<p className="text-sm text-gray-400"><strong>Genre:</strong> {beat.genre}</p>
 						<p className="text-sm text-gray-400"><strong>BPM:</strong> {beat.bpm}</p>
 						<p className="text-sm text-gray-400"><strong>Key:</strong> {beat.key}</p>
-						<audio controls className="ml-4">
+						<audio controls preload="metadata" className="ml-4">
 							<source src={beat.url} />
 							Your browser does not support the audio element.
 						</audio>
