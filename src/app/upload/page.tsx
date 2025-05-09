@@ -3,6 +3,7 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { redirect } from "next/navigation";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -60,10 +61,13 @@ export default function Upload() {
     };
   
     xhr.onload = () => {
-      setIsUploading(false);
       if (xhr.status >= 200 && xhr.status < 300) {
         setUploadProgress(100);
         alert("File uploaded successfully!");
+        setIsUploading(false);
+        cleanForm();
+        // redirect to beats page
+        redirect("/beats");
       } else {
         console.error("Upload failed:", xhr.responseText);
         alert("File upload failed. See console for details.");
@@ -78,8 +82,20 @@ export default function Upload() {
   
     xhr.send(formData);
   }
-  
 
+  const cleanForm = () => {
+    setFile(null);
+    setTitle("");
+    setArtist("");
+    setGenre("");
+    setBpm("");
+    setKey("");
+    setCoverImg("");
+    setIsUploading(false);
+    setUploadProgress(0);
+    setFileSizeInMB(0);
+  };
+  
   return (
     <>
       <NavBar />
@@ -99,6 +115,7 @@ export default function Upload() {
               id="files"
               className="hidden"
               onChange={handleFileChange}
+              disabled={isUploading}
               required
             />
           </label>
@@ -116,6 +133,7 @@ export default function Upload() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <input
             type="text"
@@ -123,6 +141,7 @@ export default function Upload() {
             value={artist}
             onChange={(e) => setArtist(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <input
             type="text"
@@ -130,6 +149,7 @@ export default function Upload() {
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <input
             type="number"
@@ -138,6 +158,7 @@ export default function Upload() {
             value={bpm}
             onChange={(e) => setBpm(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <input
             type="text"
@@ -145,6 +166,7 @@ export default function Upload() {
             value={coverImg}
             onChange={(e) => setCoverImg(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <input
             type="text"
@@ -152,6 +174,7 @@ export default function Upload() {
             value={key}
             onChange={(e) => setKey(e.target.value)}
             className="border border-gray-300 rounded p-3 focus:outline-none"
+            disabled={isUploading}
           />
           <button
             type="submit"
@@ -164,6 +187,17 @@ export default function Upload() {
           >
             Upload
           </button>
+          {isUploading && (
+            <div className="mt-4">
+              <p className="text-gray-500">Uploading: {uploadProgress}%</p>
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                <div
+                  className="bg-orange-500 h-2.5 rounded-full"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
         </form>
       </main>
     </>
