@@ -194,7 +194,14 @@ export default function Upload() {
                 <div
                   className="bg-orange-500 h-2.5 rounded-full"
                   style={{ width: `${uploadProgress}%` }}
-                ></div>
+                >
+                  {/* Display please wait message */}
+                  {uploadProgress == 100 && (
+                    <p className="text-center text-sm text-gray-500">
+                      Please wait...
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
