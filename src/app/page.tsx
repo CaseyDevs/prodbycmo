@@ -9,6 +9,7 @@ export default function Home() {
         <h1 className="text-2xl font-bold text-center">Featured: </h1>
         <div className="flex flex-col items-center">
           {/* Featured beat here */}
+
         </div>
       </main>
     </>

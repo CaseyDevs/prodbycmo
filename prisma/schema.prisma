@@ -16,6 +16,7 @@ model Beat {
   key       String
   url       String
   coverImg  String
+  featured  Boolean @default(false)
   createdAt DateTime @default(now())
 }
 

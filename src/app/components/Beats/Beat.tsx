@@ -51,7 +51,12 @@ export default function Beat({ beat }: { beat: { id: string; title: string; arti
 						<p className="text-sm text-gray-400"><strong>Genre:</strong> {beat.genre}</p>
 						<p className="text-sm text-gray-400"><strong>BPM:</strong> {beat.bpm}</p>
 						<p className="text-sm text-gray-400"><strong>Key:</strong> {beat.key}</p>
-						<audio ref={audioRef} controls preload="metadata" className="ml-4">
+						<audio
+							ref={audioRef}
+							controls
+							preload="metadata"
+							className="ml-4 h-8 [&::-webkit-media-controls-panel]:bg-zinc-700 [&::-webkit-media-controls-current-time-display]:text-white [&::-webkit-media-controls-time-remaining-display]:text-white [&::-webkit-media-controls-timeline]:bg-zinc-600 [&::-webkit-media-controls-play-button]:text-white [&::-webkit-media-controls-timeline]:rounded-lg"
+						>
 							<source src={beat.url} />
 							Your browser does not support the audio element.
 						</audio>
