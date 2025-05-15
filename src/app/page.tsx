@@ -1,25 +1,18 @@
 import NavBar from "./components/NavBar/NavBar";
-import { prisma } from "@/lib/prisma";
 import Beat from "./components/Beats/Beat";
+import { getFeaturedBeats } from "@/lib/queries";
 
 export default async function Home() {
 
-  const featuredBeats = await prisma.beat.findMany({
-    where: {
-      featured: true,
-    }, include: {
-      artists: true,
-    },
-  });
-
+  const featuredBeats = await getFeaturedBeats();
+    
   return (
     <>
       <NavBar />
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <main className="flex min-h-screen flex-col items-center p-24">
         <h1 className="text-2xl font-bold text-center">Featured: </h1>
         <div className="flex flex-col items-center">
-          {/* Featured beat here */}
-          <div className="space-y-6">
+          <div className="space-y-6 my-6">
                     {featuredBeats.map((beat) => (
                       <Beat
                         key={beat.id}
