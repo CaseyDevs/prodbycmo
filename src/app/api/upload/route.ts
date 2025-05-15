@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const fileName = `${uuid()}-${file.name}`;
 
     // Upload the file to Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("beats")
       .upload(fileName, file);
 
@@ -73,9 +73,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "Beat created successfully", beat }, { status: 201 });
 
-  } catch (error: any) {
+  } catch (error: Error | unknown) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 
 }

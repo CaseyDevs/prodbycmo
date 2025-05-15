@@ -1,6 +1,5 @@
 import NavBar from "../components/NavBar/NavBar";
 import Beat from "../components/Beats/Beat";
-import { prisma } from "@/lib/prisma";
 import { getBeats } from "@/lib/queries";
 
 export default async function Beats() {
