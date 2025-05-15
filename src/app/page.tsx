@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import NavBar from "./components/NavBar/NavBar";
 import Beat from "./components/Beats/Beat";
 import Link from "next/link";
