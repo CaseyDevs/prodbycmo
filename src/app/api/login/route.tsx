@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
     try {
@@ -31,14 +32,36 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
         }
 
-        // Return user data
-        return NextResponse.json({
-            user: {
-                id: user.id,
-                email: user.email,
-                role: user.role,
-                createdAt: user.createdAt, 
-            }}, { status: 200 });
+        // Generate a JWT token
+        const token = jwt.sign(
+            { 
+                id: user.id, 
+                email: user.email, 
+                role: user.role 
+            },
+            process.env.JWT_SECRET as string,
+            { 
+                expiresIn: "7d" 
+            }
+        );
+
+        const response = NextResponse.json({
+            message: "Login successful",
+            token,
+        }, { status: 200 });
+
+        // Set secure, HTTP-only cookie
+        response.cookies.set({
+            name: "token",
+            value: token,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            path: "/",
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7, // 7 days
+        });
+
+        return response;
 
     } catch (error: Error | unknown) {
         console.error("Error logging in:", error);
