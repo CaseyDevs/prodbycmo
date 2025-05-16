@@ -40,7 +40,21 @@ export async function POST(request: NextRequest) {
             },
         });
 
-    } catch (error) {
-    
+        if (!isPasswordValid) {
+            return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+        }
+
+        // Return user data
+        return NextResponse.json({
+            user: {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                createdAt: user.createdAt, 
+            }}, { status: 200 });
+
+    } catch (error: Error | unknown) {
+        console.error("Error logging in:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
