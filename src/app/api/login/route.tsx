@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
         // Parse the form data
         const formData = await request.formData();
 
-        const email = formData.get("email") as string;
+        const email = formData.get("email")?.toString().trim().toLowerCase() as string;
         const password = formData.get("password") as string;
 
         if (!email || !password) {
