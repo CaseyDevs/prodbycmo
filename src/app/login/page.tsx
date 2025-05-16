@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import NavBar from "../components/NavBar/NavBar"
+import Link from "next/link"
 
 
 export default function LoginPage() {
@@ -62,9 +63,9 @@ export default function LoginPage() {
 
             <p className="mt-4">
                 Don't have an account?{" "}
-                <a href="#" className="text-blue-500 hover:underline">
+                <Link href="/signup" className="text-blue-500 hover:underline">
                     Register here
-                </a>
+                </Link>
             </p>
         </form>
         </>
