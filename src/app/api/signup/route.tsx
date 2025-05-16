@@ -24,6 +24,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
         }
 
+        // Check if the user already exists
+        const existingUser = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (existingUser) {
+            return NextResponse.json({ error: "User already exists." }, { status: 409 });
+        }
+
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
