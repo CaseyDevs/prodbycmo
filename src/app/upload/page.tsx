@@ -4,6 +4,7 @@ import { useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { redirect } from "next/navigation";
+import { error } from "console";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,6 +17,7 @@ export default function Upload() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileSizeInMB, setFileSizeInMB] = useState(0);
+  const [error, setError] = useState<string | null>(null)
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFile = event.target.files?.[0];
@@ -24,7 +26,7 @@ export default function Upload() {
       setFileSizeInMB(selectedFile.size / (1024 * 1024));
       
       if (fileSizeInMB > 50) {
-        alert("File size exceeds 50MB. Please select a smaller file.");
+        setError("File size exceeds 50MB. Please select a smaller file.");
         setFile(null);
       }
     }
@@ -32,7 +34,7 @@ export default function Upload() {
 
   async function handleUpload() {
     if (!file || !title || !artist || !genre || !bpm) {
-      alert("Please fill in all required fields.");
+      setError("Please fill in all required fields.");
       return;
     }
   
@@ -69,15 +71,13 @@ export default function Upload() {
         // redirect to beats page
         redirect("/beats");
       } else {
-        console.error("Upload failed:", xhr.responseText);
-        alert("File upload failed. See console for details.");
+        setError("File upload failed: " + xhr.responseText);
       }
     };
   
     xhr.onerror = () => {
       setIsUploading(false);
-      console.error("Network error during upload");
-      alert("Network error. Please try again.");
+      setError("Network error. Please try again")
     };
   
     xhr.send(formData);
@@ -199,6 +199,9 @@ export default function Upload() {
               </div>
             </div>
           )}
+
+        {error && <p className="mt-4 text-red-600">- {error}</p>}
+
         </form>
       </main>
     </>
