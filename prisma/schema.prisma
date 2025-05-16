@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Beat {
@@ -25,4 +26,17 @@ model Artist {
   name      String   @unique
   beats     Beat[]
   createdAt DateTime @default(now())
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  role      Role     @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
 }
