@@ -12,7 +12,7 @@ const supabase = createClient(
 );
 
 export async function POST(request: NextRequest) {
-    try {
+    try {        
         // Parse the form data
         const formData = await request.formData();
 
@@ -20,8 +20,14 @@ export async function POST(request: NextRequest) {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
+        if (!email || !password) {
+            return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
+        }
+
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user in the database
         await prisma.user.create({
             data: {
                 id: uuid(),
@@ -33,8 +39,11 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        return NextResponse.json({ message: "User created successfully" }, { status: 201 });
+
 
     } catch (error: Error | unknown) {
-
+        console.error("Error signing up:", error);
+        return NextResponse.json({ error: "Oops, something went wrong :(" }, { status: 500 });
     }
 }
