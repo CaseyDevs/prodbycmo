@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden: Admins only" }, { status: 403 });
     }
 
-    // 🔽 Parse form data
+    // Parse form data
     const formData = await request.formData();
     const file: File | null = formData.get("file") as unknown as File;
     const title = formData.get("title") as string;

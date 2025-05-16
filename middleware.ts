@@ -7,6 +7,8 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const pathName = request.nextUrl.pathname;
 
+  console.log(pathName)
+
   const isPublic = PUBLIC_PATHS.includes(pathName);
 
   if (!token && !isPublic) {
@@ -16,6 +18,8 @@ export function middleware(request: NextRequest) {
   try {
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { role: string };
+
+        console.log(decoded.role)
 
       // Block non-admins from /upload
       if (pathName.startsWith("/upload") && decoded.role !== "ADMIN") {
@@ -32,5 +36,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|api/login|api/signup).*)"], // Don't run middleware on static or API routes
-};
+    matcher: [
+      "/upload",   
+      "/api/upload",   
+      "/((?!_next|favicon.ico|api/login|api/signup).*)",
+    ],
+  };
+  
+  
