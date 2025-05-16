@@ -7,14 +7,16 @@ export default function LoginPage() {
         <form className="flex flex-col items-center my-20 mx-auto w-2xl p-5">
             <h1 className="text-4xl font-bold mb-6">Login</h1>
             <input
-                type="text"
-                placeholder="Username"
+                type="email"
+                placeholder="Email"
+                name="email"
                 className="mb-4 p-2 border border-gray-300 rounded w-full"
                 required
             />
             <input
                 type="password"
                 placeholder="Password"
+                name="password"
                 className="mb-4 p-2 border border-gray-300 rounded w-full"
                 required
             />
