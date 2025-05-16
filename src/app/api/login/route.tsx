@@ -34,12 +34,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Check if the password is correct
-        const isPasswordValid = await prisma.user.findFirst({
-            where: {
-                email,
-                password,
-            },
-        });
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return NextResponse.json({ error: "Invalid password" }, { status: 401 });
