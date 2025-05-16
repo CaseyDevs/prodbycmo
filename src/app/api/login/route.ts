@@ -45,6 +45,11 @@ export async function POST(request: NextRequest) {
             }
         );
 
+        if (!process.env.JWT_SECRET) {
+            console.error("JWT_SECRET is not defined!");
+          }
+          
+
         const response = NextResponse.json({
             message: "Login successful",
             token,
@@ -62,6 +67,7 @@ export async function POST(request: NextRequest) {
         });
 
         return response;
+        
 
     } catch (error: Error | unknown) {
         console.error("Error logging in:", error);
