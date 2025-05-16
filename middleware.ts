@@ -32,5 +32,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|api/).*)"], // Don't run middleware on static or API routes
+  matcher: ["/((?!_next|favicon.ico|api/login|api/signup).*)"], // Don't run middleware on static or API routes
 };

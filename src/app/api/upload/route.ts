@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuid } from "uuid";
 import { prisma } from "@/lib/prisma";
+import jwt from "jsonwebtoken";
 
 // Create a Supabase client
 const supabase = createClient(
@@ -11,8 +12,26 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
+    // Get and verify JWT token
+    const token = request.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET!) as { role: string };
+    } catch {
+      return NextResponse.json({ error: "Invalid token" }, { status: 403 });
+    }
+
+    // Check admin role
+    if (decoded.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: Admins only" }, { status: 403 });
+    }
+
+    // 🔽 Parse form data
+    const formData = await request.formData();
     const file: File | null = formData.get("file") as unknown as File;
     const title = formData.get("title") as string;
     const artistName = formData.get("artist");
@@ -33,36 +52,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Generate a unique filename
+    // Upload to Supabase
     const fileName = `${uuid()}-${file.name}`;
-
-    // Upload the file to Supabase Storage
-    const { error } = await supabase.storage
-      .from("beats")
-      .upload(fileName, file);
-
+    const { error } = await supabase.storage.from("beats").upload(fileName, file);
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const fileUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/beats/${fileName}`; // Construct the file URL
+    const fileUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/beats/${fileName}`;
 
-    // Save the file URL and other metadata to the database
-
-    // Create or find the artist first
+    // Save metadata to DB
     const artist = await prisma.artist.upsert({
       where: { name: artistName as string },
       update: {},
       create: { name: artistName as string },
     });
 
-    // Add the beat to the database
     const beat = await prisma.beat.create({
       data: {
         title,
-        artists: {
-          connect: { id: artist.id },
-        },
+        artists: { connect: { id: artist.id } },
         genre,
         bpm: parseInt(bpm),
         key,
@@ -78,5 +87,4 @@ export async function POST(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-
 }
