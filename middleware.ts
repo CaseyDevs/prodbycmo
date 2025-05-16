@@ -13,7 +13,14 @@ export function middleware(request: NextRequest) {
 
     const isPublic = PUBLIC_PATHS.includes(pathName);
 
+
+    // Redirect to login if user is not authenticated and route is protected
     if (!token && !isPublic) {
         return NextResponse.redirect(new URL("/login", request.url));
       }
+
+    // If logged-in user tries to visit login page, redirect to home
+    if (token && pathName === "/login") {
+        return NextResponse.redirect(new URL("/", request.url))
+    }
 }
