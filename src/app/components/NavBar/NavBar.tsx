@@ -1,30 +1,37 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 
-function getRoleFromToken() {
+
+function getRoleFromLocalStorage() {
     if (typeof window === "undefined") return null
-    const match = document.cookie.match(/token=([^;]+)/);
-    if (!match) return null;
-    try {
-        const decoded: any = jwtDecode(match[1]);
-        return decoded.role;
-    } catch {
-        return null;
-    }
+    return localStorage.getItem("role");
 }
 
 export default function NavBar() {
-    const role = typeof window !== "undefined" ? getRoleFromToken() : null;
+    const [role, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const role = getRoleFromLocalStorage();
+            setRole(role);
+            console.log("Current role:", role); // Debug line
+        }, 1000);
+        setRole(getRoleFromLocalStorage());
+        return () => clearInterval(interval);
+    }, [])
 
     const items = [
-        { href: "/login", label: "Login" },
+        ...(role ? [] : [{ href: "/login", label: "Login" }]),
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
     ];
 
     if (role === "ADMIN") {
-        items.push({ href: "/upload", label: "Upload"})
+        items.push({ href: "/upload", label: "Upload" });
     }
 
     return (
