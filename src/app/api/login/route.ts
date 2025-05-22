@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
         }
 
+        if (isPasswordValid) {
         // Generate a JWT token
         const token = jwt.sign(
             { 
@@ -48,11 +49,11 @@ export async function POST(request: NextRequest) {
         if (!process.env.JWT_SECRET) {
             console.error("JWT_SECRET is not defined!");
           }
-          
 
         const response = NextResponse.json({
             message: "Login successful",
             token,
+            role: user.role,
         }, { status: 200 });
 
         // Set secure, HTTP-only cookie
@@ -67,8 +68,8 @@ export async function POST(request: NextRequest) {
         });
 
         return response;
+    }
         
-
     } catch (error: Error | unknown) {
         console.error("Error logging in:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

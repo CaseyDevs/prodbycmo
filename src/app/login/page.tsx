@@ -23,6 +23,8 @@ export default function LoginPage() {
         });
 
         if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem("role", data.role)
             router.push("/");
         } else {
             const data = await res.json();
@@ -62,7 +64,7 @@ export default function LoginPage() {
             {error && <p className="mt-4 text-red-600">{error}</p>}
 
             <p className="mt-4">
-                Don&aspos;t have an account?{" "}
+                {"Don't have an account?  "}
                 <Link href="/signup" className="text-blue-500 hover:underline">
                     Register here
                 </Link>

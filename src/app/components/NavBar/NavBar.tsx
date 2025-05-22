@@ -1,13 +1,38 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+
+
+function getRoleFromLocalStorage() {
+    if (typeof window === "undefined") return null
+    return localStorage.getItem("role");
+}
 
 export default function NavBar() {
+    const [role, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const role = getRoleFromLocalStorage();
+            setRole(role);
+            console.log("Current role:", role); // Debug line
+        }, 1000);
+        setRole(getRoleFromLocalStorage());
+        return () => clearInterval(interval);
+    }, [])
+
     const items = [
-        { href: "/login", label: "Login" },
+        ...(role ? [{ href: "/signout", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
-        { href: "/upload", label: "Upload" },
     ];
+
+    if (role === "ADMIN") {
+        items.push({ href: "/upload", label: "Upload" });
+    }
 
     return (
         <nav className="flex items-center justify-between p-6 bg-black-100 text-white">
