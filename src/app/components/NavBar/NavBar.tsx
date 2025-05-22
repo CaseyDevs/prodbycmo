@@ -25,7 +25,7 @@ export default function NavBar() {
     }, [])
 
     const items = [
-        ...(role ? [] : [{ href: "/login", label: "Login" }]),
+        ...(role ? [{ href: "/signout", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
     ];
