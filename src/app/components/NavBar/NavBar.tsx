@@ -1,13 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
+import { jwtDecode } from "jwt-decode";
+
+function getRoleFromToken() {
+    if (typeof window === "undefined") return null
+    const match = document.cookie.match(/token=([^;]+)/);
+    if (!match) return null;
+    try {
+        const decoded: any = jwtDecode(match[1]);
+        return decoded.role;
+    } catch {
+        return null;
+    }
+}
 
 export default function NavBar() {
+    const role = typeof window !== "undefined" ? getRoleFromToken() : null;
+
     const items = [
         { href: "/login", label: "Login" },
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
-        { href: "/upload", label: "Upload" },
     ];
+
+    if (role === "ADMIN") {
+        items.push({ href: "/upload", label: "Upload"})
+    }
 
     return (
         <nav className="flex items-center justify-between p-6 bg-black-100 text-white">
