@@ -7,11 +7,7 @@ import { checkAdminRole } from "@/utils/checkAdminRole";
 
 async function getRoleFromLocalStorage() {
     if (typeof window === "undefined") return null
-
-    const res = await fetch("/api/me");
-    const data = await res.json();
-    const role = data.role;
-    return role;
+    checkAdminRole();
 }
 
 export default function NavBar() {
