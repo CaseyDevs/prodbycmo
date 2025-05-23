@@ -5,7 +5,7 @@ import Beat from "../components/Beats/Beat";
 import { getBeats } from "@/lib/queries";
 
 export default async function Beats() {
-  
+
   const beats = await getBeats();
 
   return (
