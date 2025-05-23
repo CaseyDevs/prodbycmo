@@ -3,24 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { checkAdminRole } from "@/utils/checkAdminRole";
-
-async function getRoleFromLocalStorage() {
-    if (typeof window === "undefined") return null
-    checkAdminRole();
-}
+import { checkRole } from "@/utils/checkRole";
 
 export default function NavBar() {
     const [role, setRole] = useState<string | null>(null);
 
     // Check the role from local storage every second
     useEffect(() => {
-        const interval = setInterval(() => {
-            const role = getRoleFromLocalStorage();
+        async function fetchRole() {
+            const role = await checkRole();
             setRole(role);  // Update the role state
-        }, 1000);
-        setRole(getRoleFromLocalStorage());  // Set the initial role state
-        return () => clearInterval(interval);
+        }
+        fetchRole();
     }, [])
 
     const items = [
