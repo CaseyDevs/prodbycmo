@@ -19,13 +19,18 @@ export default function Upload() {
   const [error, setError] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
 
+  // Check if the user is an admin & redirect if not
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role !== "ADMIN") {
-      redirect("/");
-    } else {
-      setChecked(true);
+    async function checkRole() {
+      const res = await fetch("/api/me");
+      const data = await res.json();
+      if (data.role !== "ADMIN") {
+        redirect("/");
+      } else {
+        setChecked(true);
+      }
     }
+    checkRole();
   }, []);
 
   if (!checked) {
