@@ -3,10 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { checkAdminRole } from "@/utils/checkAdminRole";
 
-function getRoleFromLocalStorage() {
+async function getRoleFromLocalStorage() {
     if (typeof window === "undefined") return null
-    return localStorage.getItem("role");
+
+    const res = await fetch("/api/me");
+    const data = await res.json();
+    const role = data.role;
+    return role;
 }
 
 export default function NavBar() {
