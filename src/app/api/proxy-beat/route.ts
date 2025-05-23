@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Failed to fetch the URL" }, { status: response.status });
     }
 
-    const data = await response.json();
+    const data = await response.arrayBuffer();
 
-    return NextResponse.json(data, {
+    return new NextResponse(data, {
         status: 200,
         // Set the headers to allow caching
         headers: {
-            "Content-Type": response.headers.get("Content-Type") || "audipo/mpeg",
+            "Content-Type": response.headers.get("Content-Type") || "audio/mpeg",
             "Cache-Control": "public, max-age=31536000, immutable",
         },
     });
