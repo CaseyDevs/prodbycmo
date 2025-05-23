@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-
 function getRoleFromLocalStorage() {
     if (typeof window === "undefined") return null
     return localStorage.getItem("role");
@@ -13,17 +12,18 @@ function getRoleFromLocalStorage() {
 export default function NavBar() {
     const [role, setRole] = useState<string | null>(null);
 
+    // Check the role from local storage every second
     useEffect(() => {
         const interval = setInterval(() => {
             const role = getRoleFromLocalStorage();
-            setRole(role);
-            console.log("Current role:", role); // Debug line
+            setRole(role);  // Update the role state
         }, 1000);
-        setRole(getRoleFromLocalStorage());
+        setRole(getRoleFromLocalStorage());  // Set the initial role state
         return () => clearInterval(interval);
     }, [])
 
     const items = [
+        // Add the "Sign Out" link if the user is logged in, otherwise add the "Login" link
         ...(role ? [{ href: "/", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
@@ -43,7 +43,7 @@ export default function NavBar() {
         });
 
         if (response.ok) {
-            localStorage.removeItem("role");
+            localStorage.removeItem("role");  // Remove the role from local storage
             setRole(null);
             console.log("Sign out successful");
         } else {
