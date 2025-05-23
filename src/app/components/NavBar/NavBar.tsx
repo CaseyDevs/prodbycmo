@@ -43,8 +43,9 @@ export default function NavBar() {
         });
 
         if (response.ok) {
-            console.log("Sign out successful");
+            localStorage.removeItem("role");
             setRole(null);
+            console.log("Sign out successful");
         } else {
             console.error("Sign out failed");
         }
