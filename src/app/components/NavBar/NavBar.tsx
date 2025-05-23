@@ -63,7 +63,7 @@ export default function NavBar() {
             <ul className="flex space-x-4">
                 {items.map((item, index) => (
                     <li key={index}>
-                        <Link href={item.href} className="hover:text-zinc-400 transition-colors">
+                        <Link href={item.href} className="hover:text-zinc-400 transition-colors" {...item.label === "Sign Out" ? { onClick: handleSignout } : {}}>
                             {item.label}
                         </Link>
                     </li>

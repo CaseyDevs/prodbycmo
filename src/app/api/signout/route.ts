@@ -10,6 +10,7 @@ export async function POST() {
             expires: new Date(0),
             path: "/",
         });
+        return response;
     } catch (error) {
         return NextResponse.json({ message: "Logout failed", error }, { status: 500 });
     }
