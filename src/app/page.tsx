@@ -8,7 +8,7 @@ import { getFeaturedBeats } from "@/lib/queries";
 export default async function Home() {
 
   const featuredBeats = await getFeaturedBeats();
-    
+
   return (
     <>
       <NavBar />
@@ -21,14 +21,14 @@ export default async function Home() {
               <Beat
                 key={beat.id}
                 beat={{
-                    id: beat.id.toString(),
-                    title: beat.title,
-                    artist: beat.artists.map((a) => a.name).join(", "),
-                    genre: beat.genre,
-                    bpm: beat.bpm,
-                    key: beat.key,
-                    coverImg: beat.coverImg,
-                    url: beat.url,
+                  id: beat.id.toString(),
+                  title: beat.title,
+                  artist: beat.artists.map((a) => a.name).join(", "),
+                  genre: beat.genre,
+                  bpm: beat.bpm,
+                  key: beat.key,
+                  coverImg: beat.coverImg,
+                  url: beat.url,
                 }}
               />
             ))}
