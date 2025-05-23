@@ -38,8 +38,8 @@ export default function NavBar() {
         });
 
         if (response.ok) {
-            localStorage.removeItem("role");  // Remove the role from local storage
             setRole(null);
+            window.location.reload();  // Reload the page to reflect the sign-out
             console.log("Sign out successful");
         } else {
             console.error("Sign out failed");
@@ -57,13 +57,41 @@ export default function NavBar() {
                 />
             </Link>
             <ul className="flex space-x-4">
-                {items.map((item, index) => (
-                    <li key={index}>
-                        <Link href={item.href} className="hover:text-zinc-400 transition-colors" {...item.label === "Sign Out" ? { onClick: handleSignout } : {}}>
-                            {item.label}
+                {role ? (
+                    <>
+                        <li>
+                            <button
+                                onClick={handleSignout}
+                                className="hover:text-zinc-400 transition-colors bg-transparent border-none cursor-pointer"
+                            >
+                                Sign Out
+                            </button>
+                        </li>
+                    </>
+                ) : (
+                    <li>
+                        <Link href="/login" className="hover:text-zinc-400 transition-colors">
+                            Login
                         </Link>
                     </li>
-                ))}
+                )}
+                <li>
+                    <Link href="/beats" className="hover:text-zinc-400 transition-colors">
+                        Beats
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/contact" className="hover:text-zinc-400 transition-colors">
+                        Contact
+                    </Link>
+                </li>
+                {role === "ADMIN" && (
+                    <li>
+                        <Link href="/upload" className="hover:text-zinc-400 transition-colors">
+                            Upload
+                        </Link>
+                    </li>
+                )}
             </ul>
         </nav>
     );
