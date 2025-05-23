@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 
 
@@ -25,13 +24,31 @@ export default function NavBar() {
     }, [])
 
     const items = [
-        ...(role ? [{ href: "/signout", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
+        ...(role ? [{ href: "/", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
         { href: "/beats", label: "Beats" },
         { href: "/contact", label: "Contact" },
     ];
 
     if (role === "ADMIN") {
         items.push({ href: "/upload", label: "Upload" });
+    }
+
+    // Call signout API when the user clicks the "Sign Out" link
+    const handleSignout = async () => {
+        const response = await fetch("/api/signout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.ok) {
+            localStorage.removeItem("role");
+            setRole(null);
+            console.log("Sign out successful");
+        } else {
+            console.error("Sign out failed");
+        }
     }
 
     return (
@@ -45,10 +62,10 @@ export default function NavBar() {
                 />
             </Link>
             <ul className="flex space-x-4">
-                {items.map((items, index) => (
+                {items.map((item, index) => (
                     <li key={index}>
-                        <Link href={items.href} className="hover:text-zinc-400 transition-colors">
-                            {items.label}
+                        <Link href={item.href} className="hover:text-zinc-400 transition-colors" {...item.label === "Sign Out" ? { onClick: handleSignout } : {}}>
+                            {item.label}
                         </Link>
                     </li>
                 ))}

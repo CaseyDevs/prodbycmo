@@ -4,7 +4,6 @@ import { useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { redirect } from "next/navigation";
-import { error } from "console";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -24,7 +23,7 @@ export default function Upload() {
     if (selectedFile) {
       setFile(selectedFile);
       setFileSizeInMB(selectedFile.size / (1024 * 1024));
-      
+
       if (fileSizeInMB > 50) {
         setError("File size exceeds 50MB. Please select a smaller file.");
         setFile(null);
@@ -37,7 +36,7 @@ export default function Upload() {
       setError("Please fill in all required fields.");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", title);
@@ -46,14 +45,14 @@ export default function Upload() {
     formData.append("bpm", bpm);
     formData.append("key", key);
     formData.append("coverImg", coverImg);
-  
+
     // start uploading
     setIsUploading(true);
     setUploadProgress(0);
-  
+
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/upload");
-  
+
     // listen for progress events
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
@@ -61,7 +60,7 @@ export default function Upload() {
         setUploadProgress(percent);
       }
     };
-  
+
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         setUploadProgress(100);
@@ -74,12 +73,12 @@ export default function Upload() {
         setError("File upload failed: " + xhr.responseText);
       }
     };
-  
+
     xhr.onerror = () => {
       setIsUploading(false);
       setError("Network error. Please try again")
     };
-  
+
     xhr.send(formData);
   }
 
@@ -95,7 +94,7 @@ export default function Upload() {
     setUploadProgress(0);
     setFileSizeInMB(0);
   };
-  
+
   return (
     <>
       <NavBar />
@@ -200,7 +199,7 @@ export default function Upload() {
             </div>
           )}
 
-        {error && <p className="mt-4 text-red-600">- {error}</p>}
+          {error && <p className="mt-4 text-red-600">- {error}</p>}
 
         </form>
       </main>
