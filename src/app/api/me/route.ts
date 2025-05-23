@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
             role: decoded.role ?? null,
             email: decoded.email ?? null,
             id: decoded.id ?? null,
-        });
+        }, { headers: { "Cache-Control": "no-store" } });
     } catch {
         return NextResponse.json({ role: null }, { status: 200 });
     }

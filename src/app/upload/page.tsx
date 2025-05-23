@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { redirect } from "next/navigation";
+import { checkRole } from "@/utils/checkRole";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -21,16 +22,15 @@ export default function Upload() {
 
   // Check if the user is an admin & redirect if not
   useEffect(() => {
-    async function checkRole() {
-      const res = await fetch("/api/me");
-      const data = await res.json();
-      if (data.role !== "ADMIN") {
+    async function verify() {
+      const role = await checkRole();
+      if (role !== "ADMIN") {
         redirect("/");
       } else {
         setChecked(true);
       }
     }
-    checkRole();
+    verify();
   }, []);
 
   if (!checked) {
