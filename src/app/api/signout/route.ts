@@ -6,8 +6,8 @@ export async function POST() {
         // Clear the cookie by setting its expiration date to the past
         response.cookies.set("token", "", {
             httpOnly: true,
-            secure: true,
-            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
             expires: new Date(0),
             path: "/",
         });
