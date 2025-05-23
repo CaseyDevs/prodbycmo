@@ -5,7 +5,7 @@ import Beat from "../components/Beats/Beat";
 import { getBeats } from "@/lib/queries";
 
 export default async function Beats() {
-  
+
   const beats = await getBeats();
 
   return (
@@ -27,7 +27,7 @@ export default async function Beats() {
                 bpm: beat.bpm,
                 key: beat.key,
                 coverImg: beat.coverImg,
-                url: beat.url,
+                url: `/api/proxy-beat?url=${encodeURIComponent(beat.url)}`,
               }}
             />
           ))}

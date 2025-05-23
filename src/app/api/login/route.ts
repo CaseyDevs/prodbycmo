@@ -33,43 +33,43 @@ export async function POST(request: NextRequest) {
         }
 
         if (isPasswordValid) {
-        // Generate a JWT token
-        const token = jwt.sign(
-            { 
-                id: user.id, 
-                email: user.email, 
-                role: user.role 
-            },
-            process.env.JWT_SECRET as string,
-            { 
-                expiresIn: "7d" 
+            // Generate a JWT token
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role
+                },
+                process.env.JWT_SECRET as string,
+                {
+                    expiresIn: "7d"
+                }
+            );
+
+            if (!process.env.JWT_SECRET) {
+                console.error("JWT_SECRET is not defined!");
             }
-        );
 
-        if (!process.env.JWT_SECRET) {
-            console.error("JWT_SECRET is not defined!");
-          }
+            const response = NextResponse.json({
+                message: "Login successful",
+                token,
+                role: user.role,
+            }, { status: 200 });
 
-        const response = NextResponse.json({
-            message: "Login successful",
-            token,
-            role: user.role,
-        }, { status: 200 });
+            // Set secure, HTTP-only cookie
+            response.cookies.set({
+                name: "token",
+                value: token,
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                path: "/",
+                sameSite: "lax",
+                maxAge: 60 * 60 * 24 * 7, // 7 days
+            });
 
-        // Set secure, HTTP-only cookie
-        response.cookies.set({
-            name: "token",
-            value: token,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            path: "/",
-            sameSite: "lax",
-            maxAge: 60 * 60 * 24 * 7, // 7 days
-        });
+            return response;
+        }
 
-        return response;
-    }
-        
     } catch (error: Error | unknown) {
         console.error("Error logging in:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });

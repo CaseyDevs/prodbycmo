@@ -28,7 +28,7 @@ export default async function Home() {
                   bpm: beat.bpm,
                   key: beat.key,
                   coverImg: beat.coverImg,
-                  url: beat.url,
+                  url: `/api/proxy-beat?url=${encodeURIComponent(beat.url)}`,
                 }}
               />
             ))}
