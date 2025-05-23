@@ -12,6 +12,7 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
+
     // Get and verify JWT token
     const token = request.cookies.get("token")?.value;
     if (!token) {
