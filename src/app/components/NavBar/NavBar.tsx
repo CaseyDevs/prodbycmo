@@ -25,7 +25,7 @@ export default function NavBar() {
     ];
 
     if (role === "ADMIN") {
-        items.push({ href: "/upload", label: "Upload" });
+        items.push({ href: "/upload", label: "Upload" }, { href: "/dashboard", label: "Dashboard" });
     }
 
     // Call signout API when the user clicks the "Sign Out" link
@@ -86,11 +86,18 @@ export default function NavBar() {
                     </Link>
                 </li>
                 {role === "ADMIN" && (
-                    <li>
-                        <Link href="/upload" className="hover:text-zinc-400 transition-colors">
-                            Upload
-                        </Link>
-                    </li>
+                    <>
+                        <li>
+                            <Link href="/upload" className="hover:text-zinc-400 transition-colors">
+                                Upload
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/dashboard" className="hover:text-zinc-400 transition-colors">
+                                Dashboard
+                            </Link>
+                        </li>
+                    </>
                 )}
             </ul>
         </nav>
