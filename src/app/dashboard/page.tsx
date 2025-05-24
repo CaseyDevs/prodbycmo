@@ -2,19 +2,13 @@
 
 import NavBar from "../components/NavBar/NavBar"
 import { useEffect, useState } from "react";
-
-type Beat = {
-    id: string,
-    title: string,
-    genre: string,
-    bpm: number,
-    key: string,
-}
+import { Beat } from "@/lib/types/beat";
 
 export default function DashboardPage() {
     const [beats, setBeats] = useState<Beat[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Fetch beats from the API 
     useEffect(() => {
         async function fetchBeats() {
             try {
@@ -31,7 +25,6 @@ export default function DashboardPage() {
                 setLoading(false);
             }
         }
-
         fetchBeats();
     }, []);
 
