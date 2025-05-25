@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import NavBar from "../components/NavBar/NavBar";
 import Beat from "../components/Beats/Beat";
 import { getBeats } from "@/lib/queries";
@@ -13,10 +11,11 @@ export default async function Beats() {
       <NavBar />
       <main className="flex min-h-screen flex-col p-24">
         <h1 className="text-4xl text-center font-bold">Beats</h1>
-        <h3 className="text-left mt-15 pb-4">Recent</h3>
 
         <div className="space-y-6">
-          {beats.map((beat) => (
+          {beats && beats.length > 0 ? beats.map((beat) => (
+            <>
+            <h3 className="text-left mt-15 pb-4">Recent</h3>
             <Beat
               key={beat.id}
               beat={{
@@ -30,7 +29,10 @@ export default async function Beats() {
                 url: `/api/proxy-beat?url=${encodeURIComponent(beat.url)}`,
               }}
             />
-          ))}
+            </>
+          )) : (
+            <p className="flex justify-center items-center text-gray-500 min-h-50">No beats available</p>
+          )}
         </div>
       </main>
     </>
