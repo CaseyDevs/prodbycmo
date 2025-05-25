@@ -22,7 +22,6 @@ export default function DashboardPage() {
                 }
                 const data = await response.json();
                 setBeats(data);
-                setLoading(false);
             } catch (error) {
                 console.error("Error fetching beats:", error);
             } finally {
