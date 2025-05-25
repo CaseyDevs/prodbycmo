@@ -3,10 +3,31 @@
 import NavBar from "../components/NavBar/NavBar"
 import { useEffect, useState } from "react";
 import { Beat } from "@/lib/types/beat";
+import { checkRole } from "@/utils/checkRole";
+import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
     const [beats, setBeats] = useState<Beat[]>([]);
     const [loading, setLoading] = useState(true);
+    const [checked, setChecked] = useState(false);
+
+
+    useEffect(() => {
+        // Check if the user is an admin & redirect if not
+        async function verify() {
+            const role = await checkRole();
+            if (role !== "ADMIN") {
+                redirect("/");
+            } else {
+                setChecked(true);
+            }
+        }
+        verify();
+    }, []);
+
+    if (!checked) {
+        return null;
+    }
 
     // Fetch beats from the API 
     useEffect(() => {
