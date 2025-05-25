@@ -11,8 +11,6 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState(false);
 
-
-    
     // Fetch beats from the API 
     useEffect(() => {
         async function fetchBeats() {
@@ -73,12 +71,17 @@ export default function DashboardPage() {
         }
     }
 
+    function handleUpload() {
+        redirect("/upload");
+    }
+
     return (
         <>
             <NavBar />
             <div className="flex flex-col items-center min-h-screen bg-gray-100 text-black">
                 <h1 className="text-4xl font-bold m-4">Dashboard</h1>
                 <p className="text-lg">Welcome Admin!</p>
+                <button className="bg-blue-500 text-white rounded-lg p-2 m-2 hover:bg-blue-600 transition-colors" onClick={handleUpload}>Upload +</button>
                 <h3 className="text-lg">Your beats: </h3>
                 {beats && beats.length > 0 ? beats.map((beat) => (
                     <div key={beat.id} className="flex flex-row gap-4 bg-white shadow-md rounded-lg p-4 m-2 w-full max-w-xl">

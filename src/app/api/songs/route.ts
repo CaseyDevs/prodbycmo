@@ -23,6 +23,5 @@ export async function DELETE(req: Request) {
   const deletedSong = await prisma.beat.delete({
     where: { id },
   });
-
   return NextResponse.json(deletedSong);
 }
