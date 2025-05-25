@@ -1,3 +1,4 @@
+import React from "react";
 import NavBar from "../components/NavBar/NavBar";
 import Beat from "../components/Beats/Beat";
 import { getBeats } from "@/lib/queries";
@@ -15,9 +16,8 @@ export default async function Beats() {
         <div className="space-y-6">
           <h3 className="text-left mt-15 pb-4">Recent</h3>
           {beats && beats.length > 0 ? beats.map((beat) => (
-            <>
+            <React.Fragment key={beat.id}>
             <Beat
-              key={beat.id}
               beat={{
                 id: beat.id.toString(),
                 title: beat.title,
@@ -29,7 +29,7 @@ export default async function Beats() {
                 url: `/api/proxy-beat?url=${encodeURIComponent(beat.url)}`,
               }}
             />
-            </>
+            </React.Fragment>
           )) : (
             <p className="flex justify-center items-center text-gray-500 min-h-50">No beats available</p>
           )}
