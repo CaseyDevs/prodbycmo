@@ -25,3 +25,16 @@ export async function DELETE(req: Request) {
   });
   return NextResponse.json(deletedSong);
 }
+
+export async function PUT(req: Request) {
+  const { id, ...data } = await req.json();
+  if (!id) {
+    return NextResponse.json({ error: "ID is required" }, { status: 400 });
+  }
+
+  const updatedSong = await prisma.beat.update({
+    where: { id },
+    data,
+  });
+  return NextResponse.json(updatedSong);
+}

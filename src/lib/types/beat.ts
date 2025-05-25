@@ -5,4 +5,5 @@ export type Beat = {
     bpm: number,
     key: string,
     coverImg: string,
+    featured: boolean,
 }

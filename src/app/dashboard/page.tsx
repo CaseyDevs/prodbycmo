@@ -93,7 +93,31 @@ export default function DashboardPage() {
                                 <p className="text-gray-200">BPM: {beat.bpm}</p>
                                 <p className="text-gray-200">Key: {beat.key}</p>
                                 <label htmlFor={`featured-${beat.id}`} className="text-gray-200">Featured:</label>
-                                <input type="checkbox" id={`featured-${beat.id}`} name="featured" className="cursor-pointer accent-blue-500 m-auto" />
+                                <input 
+                                    type="checkbox" 
+                                    id={`featured-${beat.id}`} 
+                                    name="featured" 
+                                    className="cursor-pointer accent-blue-500 m-auto" 
+                                    checked={beat.featured}
+                                    onChange={async (e) => {
+                                        const isChecked = e.target.checked; // Get the new checked state  
+                                        try {
+                                            const response = await fetch(`/api/songs`, {
+                                                method: "PUT",
+                                                body: JSON.stringify({ id: beat.id, featured: isChecked }),  // Update the featured status 
+                                                headers: {
+                                                    "Content-Type": "application/json",
+                                                },
+                                            });
+                                            if (!response.ok) {
+                                                throw new Error("Failed to update featured status");
+                                            }
+                                            setBeats(beats.map(b => b.id === beat.id ? { ...b, featured: isChecked } : b));  // Update the state with the new featured status
+                                        } catch (error) {
+                                            console.error("Error updating featured status:", error);
+                                        }
+                                    }}
+                                    />
                             </div>
                             <div>
                                 <button className="text-red-500 rounded-lg p-1 text-sm hover:cursor-pointer hover:text-red-600 transition-colors" onClick={() => handleDelete(beat.id)}>Delete</button>
