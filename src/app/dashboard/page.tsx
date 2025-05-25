@@ -49,7 +49,7 @@ export default function DashboardPage() {
     if (!checked) {
         return null;
     }
-    
+
     if (loading) {
         return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
     }
@@ -57,8 +57,12 @@ export default function DashboardPage() {
     // Handle beat deletion
     async function handleDelete(beatId: string) {
         try {
-            const response = await fetch(`/api/songs/${beatId}`, {
+            const response = await fetch(`/api/songs`, {
                 method: "DELETE",
+                body: JSON.stringify({ id: beatId }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
             if (!response.ok) {
                 throw new Error("Failed to delete beat");
