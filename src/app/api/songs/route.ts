@@ -13,3 +13,28 @@ export async function POST(req: Request) {
   });
   return NextResponse.json(song);
 }
+
+export async function DELETE(req: Request) {
+  const { id } = await req.json();
+  if (!id) {
+    return NextResponse.json({ error: "ID is required" }, { status: 400 });
+  }
+
+  const deletedSong = await prisma.beat.delete({
+    where: { id },
+  });
+  return NextResponse.json(deletedSong);
+}
+
+export async function PUT(req: Request) {
+  const { id, ...data } = await req.json();
+  if (!id) {
+    return NextResponse.json({ error: "ID is required" }, { status: 400 });
+  }
+
+  const updatedSong = await prisma.beat.update({
+    where: { id },
+    data,
+  });
+  return NextResponse.json(updatedSong);
+}

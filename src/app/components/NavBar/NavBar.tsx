@@ -17,17 +17,6 @@ export default function NavBar() {
         fetchRole();
     }, [])
 
-    const items = [
-        // Add the "Sign Out" link if the user is logged in, otherwise add the "Login" link
-        ...(role ? [{ href: "/", label: "Sign Out" }] : [{ href: "/login", label: "Login" }]),
-        { href: "/beats", label: "Beats" },
-        { href: "/contact", label: "Contact" },
-    ];
-
-    if (role === "ADMIN") {
-        items.push({ href: "/upload", label: "Upload" });
-    }
-
     // Call signout API when the user clicks the "Sign Out" link
     const handleSignout = async () => {
         const response = await fetch("/api/signout", {
@@ -40,9 +29,6 @@ export default function NavBar() {
         if (response.ok) {
             setRole(null);
             window.location.reload();  // Reload the page to reflect the sign-out
-            console.log("Sign out successful");
-        } else {
-            console.error("Sign out failed");
         }
     }
 
@@ -56,7 +42,7 @@ export default function NavBar() {
                     height={60}
                 />
             </Link>
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-6">
                 {role ? (
                     <>
                         <li>
@@ -86,11 +72,13 @@ export default function NavBar() {
                     </Link>
                 </li>
                 {role === "ADMIN" && (
-                    <li>
-                        <Link href="/upload" className="hover:text-zinc-400 transition-colors">
-                            Upload
-                        </Link>
-                    </li>
+                    <>
+                        <li>
+                            <Link href="/dashboard" className="hover:text-zinc-400 transition-colors">
+                                Dashboard
+                            </Link>
+                        </li>
+                    </>
                 )}
             </ul>
         </nav>
