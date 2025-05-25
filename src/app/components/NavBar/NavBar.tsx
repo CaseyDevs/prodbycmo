@@ -56,7 +56,7 @@ export default function NavBar() {
                     height={60}
                 />
             </Link>
-            <ul className="flex space-x-4">
+            <ul className="flex space-x-6">
                 {role ? (
                     <>
                         <li>

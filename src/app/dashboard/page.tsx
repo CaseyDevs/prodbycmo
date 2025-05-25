@@ -84,17 +84,19 @@ export default function DashboardPage() {
                     <h3 className="text-lg mt-10">Your beats: </h3>
                     <button className="bg-blue-500 text-white rounded-lg p-2 m-2 hover:bg-blue-600 transition-colors" onClick={handleUpload}>Upload +</button>
                 {beats && beats.length > 0 ? beats.map((beat) => (
-                    <div key={beat.id} className="flex flex-row gap-4 bg-white shadow-md rounded-lg p-4 m-2 w-full max-w-xl">
+                    <div key={beat.id} className="flex flex-row gap-4 bg-gray-900 shadow-md rounded-lg p-4 m-2 w-full max-w-xl">
                         <img src={beat.coverImg} alt="Cover Img" className="h-20 w-20" />
                         <div className="flex flex-col">
                             <h2 className="text-xl font-semibold">{beat.title}</h2>
                             <div className="flex flex-row gap-4">
-                                <p className="text-gray-600">Genre: {beat.genre}</p>
-                                <p className="text-gray-600">BPM: {beat.bpm}</p>
-                                <p className="text-gray-600">Key: {beat.key}</p>
+                                <p className="text-gray-200">Genre: {beat.genre}</p>
+                                <p className="text-gray-200">BPM: {beat.bpm}</p>
+                                <p className="text-gray-200">Key: {beat.key}</p>
+                                <label htmlFor={`featured-${beat.id}`} className="text-gray-200">Featured:</label>
+                                <input type="checkbox" id={`featured-${beat.id}`} name="featured" className="cursor-pointer accent-blue-500 m-auto" />
                             </div>
                             <div>
-                                <button className="text-red-500 rounded-lg p-1 text-sm hover:cursor-pointer" onClick={() => handleDelete(beat.id)}>Delete</button>
+                                <button className="text-red-500 rounded-lg p-1 text-sm hover:cursor-pointer hover:text-red-600 transition-colors" onClick={() => handleDelete(beat.id)}>Delete</button>
                             </div>
                         </div>
                     </div>
