@@ -13,9 +13,9 @@ export default async function Beats() {
         <h1 className="text-4xl text-center font-bold">Beats</h1>
 
         <div className="space-y-6">
+          <h3 className="text-left mt-15 pb-4">Recent</h3>
           {beats && beats.length > 0 ? beats.map((beat) => (
             <>
-            <h3 className="text-left mt-15 pb-4">Recent</h3>
             <Beat
               key={beat.id}
               beat={{
