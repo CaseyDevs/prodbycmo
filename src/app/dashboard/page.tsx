@@ -2,14 +2,15 @@
 
 import NavBar from "../components/NavBar/NavBar"
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Beat } from "@/lib/types/beat";
 import { checkRole } from "@/utils/checkRole";
-import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
     const [beats, setBeats] = useState<Beat[]>([]);
     const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState(false);
+    const router = useRouter();
 
     // Fetch beats from the API 
     useEffect(() => {
@@ -36,7 +37,7 @@ export default function DashboardPage() {
         async function verify() {
             const role = await checkRole();
             if (role !== "ADMIN") {
-                redirect("/");
+                router.push("/");
             } else {
                 setChecked(true);
             }
@@ -72,7 +73,7 @@ export default function DashboardPage() {
     }
 
     function handleUpload() {
-        redirect("/upload");
+        router.push("/upload");
     }
 
     return (
