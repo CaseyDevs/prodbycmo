@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { redirect } from "next/navigation";
 
 async function getUserFromRequest(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
