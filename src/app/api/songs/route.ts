@@ -2,15 +2,19 @@ import { prisma } from "@/lib/prisma";
 import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { requireAdmin } from "@/utils/requireAdmin";
 
 // Add authentication checks on crud routes
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const beats = await prisma.beat.findMany();
   return NextResponse.json(beats);
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (auth instanceof NextResponse) return auth;
+
   const data = await req.json();
   const song = await prisma.beat.create({
     data,
@@ -18,7 +22,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(song);
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (auth instanceof NextResponse) return auth;
+
   const { id } = await req.json();
   if (!id) {
     return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -30,7 +37,10 @@ export async function DELETE(req: Request) {
   return NextResponse.json(deletedSong);
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (auth instanceof NextResponse) return auth;
+
   const { id, ...data } = await req.json();
   if (!id) {
     return NextResponse.json({ error: "ID is required" }, { status: 400 });
