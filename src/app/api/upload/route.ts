@@ -3,6 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { v4 as uuid } from "uuid";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/utils/requireAdmin";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 // Create a Supabase client
 const supabase = createClient(
@@ -10,12 +12,24 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.fixedWindow(2, "60 s"),
+});
+
 export async function POST(request: NextRequest) {
   try {
 
     // Check if the user is an admin
     const auth = await requireAdmin(request);
     if (auth instanceof NextResponse) return auth;
+
+    // Rate limit the request
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
 
     // Parse form data
     const formData = await request.formData();

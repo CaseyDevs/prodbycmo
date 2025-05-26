@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-// Configure rate limiter (10 requests per 60 seconds per IP)
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.fixedWindow(10, "60 s"),
@@ -20,8 +19,6 @@ export async function POST(request: NextRequest) {
         // Parse the IP address from the request headers
         const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
         const { success } = await ratelimit.limit(ip as string);
-        
-       // Check if the request is within the rate limit 
         if (!success) {
             return NextResponse.json({ error: "Too many requests! Try again later." }, { status: 429 });
         }
