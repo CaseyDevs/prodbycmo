@@ -4,17 +4,25 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import NavBar from "../components/NavBar/NavBar"
 import Link from "next/link"
-
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function LoginPage() {
     const router = useRouter()
     const [error, setError] = useState<string | null>(null)
+    const [captcha, setCaptcha] = useState<string | null>(null);
 
     async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
         const form = event.currentTarget as HTMLFormElement; // Cast to HTMLFormElement
         const formData = new FormData(form)
+
+        if (!captcha) {
+            setError("Please complete the reCAPTCHA.");
+            return;
+        }
+        
+        formData.append("g-recaptcha-response", captcha);
 
         // Post the form data to the API
         const res = await fetch("/api/login", {
@@ -53,6 +61,10 @@ export default function LoginPage() {
                 name="password"
                 className="mb-4 p-2 border border-gray-300 rounded w-full"
                 required
+            />
+            <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={setCaptcha}
             />
             <button 
                 className="bg-orange-500 text-white p-2 rounded hover:bg-orange-800 transition-colors w-full"
