@@ -2,9 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.fixedWindow(10, "60 s"),
+});
 
 export async function POST(request: NextRequest) {
     try {
+        if (!process.env.JWT_SECRET) {
+            throw new Error("JWT_SECRET is not defined in environment variables");
+        }
+
+        // Parse the IP address from the request headers
+        const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
+        const { success } = await ratelimit.limit(ip as string);
+        if (!success) {
+            return NextResponse.json({ error: "Too many requests! Try again later." }, { status: 429 });
+        }
 
         // Parse the form data
         const formData = await request.formData();
