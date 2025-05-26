@@ -62,16 +62,18 @@ export default function LoginPage() {
                 className="mb-4 p-2 border border-gray-300 rounded w-full"
                 required
             />
-            <ReCAPTCHA
-                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                onChange={setCaptcha}
-            />
             <button 
                 className="bg-orange-500 text-white p-2 rounded hover:bg-orange-800 transition-colors w-full"
                 type="submit"
             >
                 Login
             </button>
+            <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={setCaptcha}
+                className="mt-6"
+                onExpired={() => setCaptcha(null)}
+            />
 
             {error && <p className="mt-4 text-red-600">{error}</p>}
 
