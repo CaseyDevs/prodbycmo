@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# prodbycmo
+
+[![Homepage](https://img.shields.io/badge/homepage-prodbycmo.vercel.app-blue)](https://prodbycmo.vercel.app)
+
+**prodbycmo** is a web platform to host and eventually sell my music.
+
+## Overview
+
+This project serves as a personal platform for sharing, showcasing, and distributing music created by [CaseyDevs](https://github.com/CaseyDevs). The website is live at [prodbycmo.vercel.app](https://prodbycmo.vercel.app).
+
+## Features
+
+- Online music sharing and streaming
+- Clean, modern web interface
+- Built with TypeScript for reliability and scalability
+
+## Tech Stack
+
+- **Frontend:** TypeScript, React, Next.js, Tailwaind
+- **Backend:** Typescript, Prisma, Supabase
+- **Deployment:** Vercel
 
 ## Getting Started
 
-First, run the development server:
+> _More details on installation and local development coming soon!_
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## License
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+_This repository currently does not specify a license._
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Author
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [CaseyDevs](https://github.com/CaseyDevs)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
