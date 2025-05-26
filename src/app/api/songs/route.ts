@@ -2,7 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/utils/requireAdmin";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (auth instanceof NextResponse) return auth;
+
   const beats = await prisma.beat.findMany();
   return NextResponse.json(beats);
 }
