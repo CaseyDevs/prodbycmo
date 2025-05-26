@@ -28,19 +28,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(beats);
 }
 
-export async function POST(req: NextRequest) {
-  const auth = await requireAdmin(req);
-  if (auth instanceof NextResponse) return auth;
-
-  const rate = await limitRequest(req); if (rate) return rate;
-
-  const data = await req.json();
-  const song = await prisma.beat.create({
-    data,
-  });
-  return NextResponse.json(song);
-}
-
 export async function DELETE(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (auth instanceof NextResponse) return auth;
