@@ -1,12 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { request } from "http";
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+
+// Add authentication checks on crud routes
 
 export async function GET() {
   const beats = await prisma.beat.findMany();
   return NextResponse.json(beats);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const data = await req.json();
   const song = await prisma.beat.create({
     data,
