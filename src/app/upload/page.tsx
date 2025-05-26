@@ -88,7 +88,7 @@ export default function Upload() {
         setIsUploading(false);
         cleanForm();
         // redirect to beats page
-        redirect("/beats");
+        router.push("/beats");
       } else {
         setError("File upload failed: " + xhr.responseText);
       }
