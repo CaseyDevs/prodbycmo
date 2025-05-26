@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { v4 as uuid } from "uuid";
 import { prisma } from "@/lib/prisma";
 import jwt from "jsonwebtoken";
+import { requireAdmin } from "@/utils/requireAdmin";
 
 // Create a Supabase client
 const supabase = createClient(
@@ -13,23 +14,9 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
 
-    // Get and verify JWT token
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!) as { role: string };
-    } catch {
-      return NextResponse.json({ error: "Invalid token" }, { status: 403 });
-    }
-
-    // Check admin role
-    if (decoded.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admins only" }, { status: 403 });
-    }
+    // Check if the user is an admin
+    const auth = await requireAdmin(request);
+    if (auth instanceof NextResponse) return auth;
 
     // Parse form data
     const formData = await request.formData();
