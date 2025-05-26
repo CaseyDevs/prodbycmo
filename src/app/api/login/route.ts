@@ -14,11 +14,14 @@ const ratelimit = new Ratelimit({
 export async function POST(request: NextRequest) {
     try {
         if (!process.env.JWT_SECRET) {
-            return NextResponse.json({ error: "JWT_SECRET is not defined" }, { status: 500 });
+            throw new Error("JWT_SECRET is not defined in environment variables");
         }
 
+        // Parse the IP address from the request headers
         const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
         const { success } = await ratelimit.limit(ip as string);
+        
+       // Check if the request is within the rate limit 
         if (!success) {
             return NextResponse.json({ error: "Too many requests! Try again later." }, { status: 429 });
         }
