@@ -6,7 +6,7 @@ import { requireAdmin } from "@/utils/requireAdmin";
 
 // Add authentication checks on crud routes
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const beats = await prisma.beat.findMany();
   return NextResponse.json(beats);
 }
