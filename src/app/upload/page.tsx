@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar/NavBar";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { checkRole } from "@/utils/checkRole";
 
 export default function Upload() {
@@ -19,13 +19,14 @@ export default function Upload() {
   const [fileSizeInMB, setFileSizeInMB] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
+  const router = useRouter();
 
   // Check if the user is an admin & redirect if not
   useEffect(() => {
     async function verify() {
       const role = await checkRole();
       if (role !== "ADMIN") {
-        redirect("/");
+        router.push("/");
       } else {
         setChecked(true);
       }
