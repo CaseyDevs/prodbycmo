@@ -38,7 +38,10 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: [
       "/upload",   
-      "/api/upload",   
+      "/api/upload",  
+      "/dashboard",
+      "/api/dashboard", 
+      "/api/songs",
       "/((?!_next|favicon.ico|api/login|api/signup).*)",
     ],
   };
