@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuid } from "uuid";
 import { prisma } from "@/lib/prisma";
-import jwt from "jsonwebtoken";
 import { requireAdmin } from "@/utils/requireAdmin";
 
 // Create a Supabase client

@@ -1,10 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { requireAdmin } from "@/utils/requireAdmin";
-
-// Add authentication checks on crud routes
 
 export async function GET() {
   const beats = await prisma.beat.findMany();
