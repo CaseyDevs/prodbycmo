@@ -13,6 +13,9 @@ const ratelimit = new Ratelimit({
 
 export async function POST(request: NextRequest) {
     try {
+        if (!process.env.JWT_SECRET) {
+            return NextResponse.json({ error: "JWT_SECRET is not defined" }, { status: 500 });
+        }
 
         const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
         const { success } = await ratelimit.limit(ip as string);
