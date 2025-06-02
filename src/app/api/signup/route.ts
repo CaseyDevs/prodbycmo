@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
                 `,
             });
 
-            console.log("Email sent successfully:", emailResult);
+            console.log("Email sent successfully");
             
             if (emailResult.error) {
                 throw new Error(`Email sending failed: ${emailResult.error.message}`);
