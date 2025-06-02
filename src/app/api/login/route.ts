@@ -49,7 +49,11 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
         }
 
-        if (isPasswordValid) {
+        if (!user.emailVerified) {
+            return NextResponse.json({ error: "Please verify your email address" }, { status: 403 });
+        }
+
+        if (isPasswordValid && user.emailVerified) {
             // Generate a JWT token
             const token = jwt.sign(
                 {

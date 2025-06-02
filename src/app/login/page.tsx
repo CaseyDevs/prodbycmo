@@ -31,8 +31,6 @@ export default function LoginPage() {
         });
 
         if (res.ok) {
-            const data = await res.json();
-            localStorage.setItem("role", data.role)
             router.push("/");
         } else {
             const data = await res.json();
