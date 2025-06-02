@@ -6,9 +6,7 @@ import { Resend } from "resend";
 
 export async function POST(request: NextRequest) {
 
-    // Check if RESEND_API_KEY is available
     if (!process.env.RESEND_API_KEY) {
-        console.error("RESEND_API_KEY is not set in environment variables");
         return NextResponse.json({ error: "Email service configuration error" }, { status: 500 });
     }
 
@@ -60,7 +58,7 @@ export async function POST(request: NextRequest) {
         // Send verification email
         try {
             const emailResult = await resend.emails.send({
-                from: "Casey <no-reply@caseydevs.co.uk>",
+                from: "ProdByCmo <no-reply@caseydevs.co.uk>",
                 to: [email],
                 subject: "Verify your email",
                 html: `
@@ -80,13 +78,11 @@ export async function POST(request: NextRequest) {
             console.log("Email sent successfully:", emailResult);
             
             if (emailResult.error) {
-                console.error("Email sending failed:", emailResult.error);
                 throw new Error(`Email sending failed: ${emailResult.error.message}`);
             }
-        } catch (emailError) {
-            console.error("Error sending verification email:", emailError);
-            // Don't fail the signup, but log the error
-            // You might want to implement a retry mechanism or queue system here
+            
+        } catch (emailError: Error | unknown) {
+            return NextResponse.json({ error: `Failed to send verification email: ${emailError}` }, { status: 500 });
         }
 
         return NextResponse.json({ message: "Signup successful! Please check your email to verify your account." }, { status: 201 });
