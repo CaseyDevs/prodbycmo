@@ -31,7 +31,6 @@ export default function LoginPage() {
         });
 
         if (res.ok) {
-            const data = await res.json();
             router.push("/");
         } else {
             const data = await res.json();
