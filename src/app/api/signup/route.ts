@@ -46,9 +46,22 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: "Password cannot contain backslashes." }, { status: 400 });
             }
 
-            if (char === '') {
+            if (char === "'") {
                 return NextResponse.json({ error: "Password cannot contain single quotes." }, { status: 400 });
             }
+        }
+
+        // Password must contain at least one uppercase and one lowercase letter
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+        if (!uppercaseRegex.test(password) || !lowercaseRegex.test(password)) {
+            return NextResponse.json({ error: "Password must contain both uppercase and lowercase letters." }, { status: 400 });
+        }
+
+        // Password must contain at least one number
+        const digitRegex = /[0-9]/;
+        if (!digitRegex.test(password)) {
+            return NextResponse.json({ error: "Password must contain at least one number." }, { status: 400 });
         }
 
         // Password must contain atleast one special character
