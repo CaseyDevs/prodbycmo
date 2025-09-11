@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
         // Extract the form data
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+        const confirmPassword = formData.get("confirmPassword") as string;
 
-        if (!email || !password) {
+        if (!email || !password || !confirmPassword) {
             return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
         }
 
@@ -31,6 +32,11 @@ export async function POST(request: NextRequest) {
         const existingUser = await prisma.user.findUnique({
             where: { email },
         });
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            return NextResponse.json({ error: "Passwords do not match." }, { status: 400 });
+        }
 
         if (existingUser) {
             return NextResponse.json({ error: "User already exists." }, { status: 409 });
