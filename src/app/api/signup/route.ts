@@ -37,18 +37,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Password must be at least 8 characters long." }, { status: 400 });
         }
 
-        for (const char of password) {
-            if (char === ' ') {
-                return NextResponse.json({ error: "Password cannot contain spaces." }, { status: 400 });
-            }
-
-            if (char === '\\') {
-                return NextResponse.json({ error: "Password cannot contain backslashes." }, { status: 400 });
-            }
-
-            if (char === "'") {
-                return NextResponse.json({ error: "Password cannot contain single quotes." }, { status: 400 });
-            }
+        // Check for disallowed characters
+        const disallowedRegex = /[ '\\]/;
+        if (disallowedRegex.test(password)) {
+            return NextResponse.json({ error: "Password contains invalid characters." }, { status: 400 });
         }
 
         // Password must contain at least one uppercase and one lowercase letter
