@@ -52,6 +52,13 @@ export default function SignupPage() {
                 className="mb-4 p-2 border border-gray-300 rounded w-full"
                 required
             />
+            <input
+                type="password"
+                placeholder="Confirm your Password"
+                name="confirmPassword"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                required
+            />
             <button 
                 className="bg-blue-500 text-white p-2 rounded hover:bg-blue-800 transition-colors w-full"
                 type="submit"
