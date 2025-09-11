@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
         // Extract the form data
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+        const confirmPassword = formData.get("confirmPassword") as string;
 
-        if (!email || !password) {
+        if (!email || !password || !confirmPassword) {
             return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
         }
 
@@ -31,6 +32,48 @@ export async function POST(request: NextRequest) {
         const existingUser = await prisma.user.findUnique({
             where: { email },
         });
+
+        if (password.length < 8) {
+            return NextResponse.json({ error: "Password must be at least 8 characters long." }, { status: 400 });
+        }
+
+        for (const char of password) {
+            if (char === ' ') {
+                return NextResponse.json({ error: "Password cannot contain spaces." }, { status: 400 });
+            }
+
+            if (char === '\\') {
+                return NextResponse.json({ error: "Password cannot contain backslashes." }, { status: 400 });
+            }
+
+            if (char === "'") {
+                return NextResponse.json({ error: "Password cannot contain single quotes." }, { status: 400 });
+            }
+        }
+
+        // Password must contain at least one uppercase and one lowercase letter
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+        if (!uppercaseRegex.test(password) || !lowercaseRegex.test(password)) {
+            return NextResponse.json({ error: "Password must contain both uppercase and lowercase letters." }, { status: 400 });
+        }
+
+        // Password must contain at least one number
+        const digitRegex = /[0-9]/;
+        if (!digitRegex.test(password)) {
+            return NextResponse.json({ error: "Password must contain at least one number." }, { status: 400 });
+        }
+
+        // Password must contain atleast one special character
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!specialCharRegex.test(password)) {
+            return NextResponse.json({ error: "Password must contain at least one special character. (!@#$%^&*(),.?\":{}|<> )" }, { status: 400 });
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            return NextResponse.json({ error: "Passwords do not match." }, { status: 400 });
+        }
 
         if (existingUser) {
             return NextResponse.json({ error: "User already exists." }, { status: 409 });
